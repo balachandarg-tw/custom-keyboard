@@ -19,6 +19,7 @@ export default function AmountInputScreen() {
         <View style={styles.container}>
             {showKeyboard && (
                 <Pressable
+                    testID="keyboard-backdrop"
                     style={StyleSheet.absoluteFill}
                     onPress={() => setShowKeyboard(false)}
                 />

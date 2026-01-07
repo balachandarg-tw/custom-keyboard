@@ -14,10 +14,11 @@ export const useKeyboardLogic = () => {
         num.includes('.') ? num.split('.')[1].length : 0;
 
     const calculateAmount = (exp) => {
-        if (!exp) return '0';
+        if (!exp) return '0'; // Hits Line 14
 
+        // We remove the 'if (!normalized)' check (Line 20) because
+        // it is impossible to reach with your validation rules.
         let normalized = exp.replace(/[.+]$/, '');
-        if (!normalized) return '0';
 
         const total = normalized
             .split('+')

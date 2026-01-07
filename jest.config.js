@@ -7,7 +7,8 @@ module.exports = {
   ],
   collectCoverage: true,
   collectCoverageFrom: [
-    "src/hooks/**/*.{js,jsx}", // Adjust this path to where your hook is located
+    "src/hooks/**/*.{js,jsx}",
+    "src/screens/**/*.{js,jsx}",
     "!vendor/**"
   ]
 };

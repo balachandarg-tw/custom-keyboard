@@ -97,7 +97,7 @@ describe('useKeyboardLogic 100% Coverage', () => {
         expect(result.current.amount).toBe('0');
     });
 
-    it('covers the false branch of Line 20 (Normal operation)', () => {
+    it('covers the false branch Normal operation', () => {
         const { result } = renderHook(() => useKeyboardLogic());
         act(() => { result.current.handleKeyPress('5'); });
         expect(result.current.amount).toBe('5');

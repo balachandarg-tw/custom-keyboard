@@ -9,6 +9,7 @@ module.exports = {
   collectCoverageFrom: [
     "src/hooks/**/*.{js,jsx}",
     "src/screens/**/*.{js,jsx}",
+    "src/components/**/*.{js,jsx}",
     "!vendor/**"
   ]
 };

@@ -10,6 +10,7 @@ module.exports = {
     "src/hooks/**/*.{js,jsx}",
     "src/screens/**/*.{js,jsx}",
     "src/components/**/*.{js,jsx}",
+    "src/helper/**/*.{js,jsx}",
     "!vendor/**"
   ]
 };

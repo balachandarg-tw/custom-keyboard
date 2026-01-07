@@ -15,13 +15,16 @@ export const useKeyboardLogic = () => {
 
     const calculateAmount = (exp) => {
         if (!exp) return '0';
+
         let normalized = exp.replace(/[.+]$/, '');
         if (!normalized) return '0';
-        return normalized
+
+        const total = normalized
             .split('+')
             .filter(Boolean)
-            .reduce((sum, val) => sum + parseFloat(val), 0)
-            .toString();
+            .reduce((sum, val) => sum + parseFloat(val), 0);
+
+        return total.toString();
     };
 
     const showExpression = expression.includes('+');

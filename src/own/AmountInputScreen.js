@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
 import CustomKeyboard from "./CustomKeyboard";
 import { useKeyboardLogic } from "./useCustomKeyboardLogic";
+import {formatINR} from "../helper/utils";
 
 export default function AmountInputScreen() {
     const {
@@ -25,7 +26,7 @@ export default function AmountInputScreen() {
 
             <TouchableOpacity onPress={() => setShowKeyboard(true)}>
                 <View style={styles.amountBox}>
-                    <Text style={styles.amountText}>₹ {amount}</Text>
+                    <Text style={styles.amountText}>₹ {formatINR(amount)}</Text>
                 </View>
             </TouchableOpacity>
 

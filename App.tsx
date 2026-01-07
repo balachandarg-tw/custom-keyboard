@@ -10,7 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import AmountInputScreen from "./src/own/AmountInputScreen.js";
+import AmountInputScreen from "./src/screens/AmountInputScreen.js";
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';

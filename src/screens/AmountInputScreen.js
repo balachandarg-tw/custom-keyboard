@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Pressable } from 'react-native';
-import CustomKeyboard from "./CustomKeyboard";
-import { useKeyboardLogic } from "./useCustomKeyboardLogic";
 import {formatINR} from "../helper/utils";
+import {useKeyboardLogic} from "../hooks/useCustomKeyboardLogic";
+import CustomKeyboard from "../components/CustomKeyboard";
 
 export default function AmountInputScreen() {
     const {

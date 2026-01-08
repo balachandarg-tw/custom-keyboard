@@ -14,11 +14,8 @@ export const useKeyboardLogic = () => {
         num.includes('.') ? num.split('.')[1].length : 0;
 
     const calculateAmount = (exp) => {
-        if (!exp) return '0'; // Hits Line 14
-
-        // We remove the 'if (!normalized)' check (Line 20) because
-        // it is impossible to reach with your validation rules.
-        let normalized = exp.replace(/[.+]$/, '');
+        if (!exp) return '0';
+        let normalized = exp.replace(/\s/g, '').replace(/[.+]$/, '');
 
         const total = normalized
             .split('+')
@@ -42,17 +39,24 @@ export const useKeyboardLogic = () => {
         }
 
         if (key === '⌫') {
-            const updated = expression.slice(0, -1);
+            const isOperatorWithSpaces = expression.endsWith(' + ');
+            const updated = isOperatorWithSpaces
+                ? expression.slice(0, -3)
+                : expression.slice(0, -1);
+            setExpression(updated);
+            setAmount(calculateAmount(updated));
+            return;
+        }
+
+        if (key === '+') {
+            if (lastChar === '+' || lastChar === '.' || lastChar === ' ') return;
+            const updated = expression + ' + ';
             setExpression(updated);
             setAmount(calculateAmount(updated));
             return;
         }
 
         if (!expression && (key === '.' || key === '+')) return;
-
-        if (key === '+') {
-            if (lastChar === '+' || lastChar === '.') return;
-        }
 
         if (key === '.') {
             if (lastChar === '+') return;

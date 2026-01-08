@@ -1,5 +1,13 @@
 import React, {useEffect, useRef} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Pressable, TextInput, Animated} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Pressable,
+    TextInput,
+    Animated,
+    TouchableWithoutFeedback
+} from 'react-native';
 import {formatINR} from "../helper/utils";
 import {useKeyboardLogic} from "../hooks/useCustomKeyboardLogic";
 import CustomKeyboard from "../components/CustomKeyboard";
@@ -99,11 +107,11 @@ export default function AmountInputScreen() {
                 />
             )}
 
-            <TouchableOpacity onPress={() => setShowKeyboard(true)}>
+            <TouchableWithoutFeedback onPress={() => setShowKeyboard(true)}>
                 <View style={styles.amountBox}>
                     {renderFormattedAmount(amount)}
                 </View>
-            </TouchableOpacity>
+            </TouchableWithoutFeedback>
 
             <View style={styles.inputWrapper}>
                 {showExpression && (

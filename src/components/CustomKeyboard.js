@@ -4,10 +4,10 @@ import { View, Text, TouchableOpacity, Animated, StyleSheet } from 'react-native
 export const KEYBOARD_HEIGHT = 320;
 
 const INPUT_KEYS = [
-    ['1', '2', '3'],
-    ['4', '5', '6'],
-    ['7', '8', '9'],
-    ['+', '0', '.'],
+    ['1', '2', '3', "-"],
+    ['4', '5', '6', "+"],
+    ['7', '8', '9', "⌫"],
+    [',', '0', '.', "✔"],
 ];
 
 const CustomKeyboard = ({ slideAnim, onKeyPress }) => {
@@ -18,32 +18,21 @@ const CustomKeyboard = ({ slideAnim, onKeyPress }) => {
                 { transform: [{ translateY: slideAnim }] },
             ]}
         >
-            <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 1 }}>
-                    {INPUT_KEYS.map((row, rowIndex) => (
-                        <View key={rowIndex} style={styles.keyRow}>
-                            {row.map((key) => (
-                                <TouchableOpacity
-                                    key={key}
-                                    style={styles.key}
-                                    onPress={() => onKeyPress(key)}
-                                >
-                                    <Text style={styles.keyText}>{key}</Text>
-                                </TouchableOpacity>
-                            ))}
-                        </View>
+        <View style={{ flex: 1 }}>
+            {INPUT_KEYS.map((row, rowIndex) => (
+                <View key={rowIndex} style={styles.keyRow}>
+                    {row.map((key) => (
+                        <TouchableOpacity
+                            key={key}
+                            style={styles.key}
+                            onPress={() => onKeyPress(key)}
+                        >
+                            <Text style={styles.keyText}>{key}</Text>
+                        </TouchableOpacity>
                     ))}
                 </View>
-
-                <View style={styles.sideColumn}>
-                    <TouchableOpacity style={styles.sideKey} onPress={() => onKeyPress('⌫')}>
-                        <Text style={styles.keyText}>⌫</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.sideKey, styles.doneKey]} onPress={() => onKeyPress('✔')}>
-                        <Text style={styles.keyText}>✔</Text>
-                    </TouchableOpacity>
+            ))}
                 </View>
-            </View>
         </Animated.View>
     );
 };

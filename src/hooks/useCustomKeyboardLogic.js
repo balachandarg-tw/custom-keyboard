@@ -58,6 +58,8 @@ export const useKeyboardLogic = () => {
 
         if (!expression && (key === '.' || key === '+')) return;
 
+        if ((key === ',' || key === '-' )) return;
+
         if (key === '.') {
             if (lastChar === '+') return;
             if (currentPart.includes('.')) return;

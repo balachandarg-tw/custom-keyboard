@@ -29,7 +29,7 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <GenericPaymentScreen/>
+      <PaymentScreen/>
     </View>
   );
 }

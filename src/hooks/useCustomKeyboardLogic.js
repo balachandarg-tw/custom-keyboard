@@ -6,7 +6,7 @@ export const KEYBOARD_HEIGHT = 320;
 export const useKeyboardLogic = () => {
     const [expression, setExpression] = useState('');
     const [amount, setAmount] = useState('0');
-    const [showKeyboard, setShowKeyboard] = useState(false);
+    const [isPaymentKeyboardVisible, setPaymentKeyboardVisible] = useState(false);
 
     const slideAnim = useRef(new Animated.Value(KEYBOARD_HEIGHT)).current;
 
@@ -27,14 +27,13 @@ export const useKeyboardLogic = () => {
 
     const showExpression = expression.includes('+');
 
-
     const handleKeyPress = (key) => {
         const lastChar = expression.slice(-1);
         const parts = expression.split('+');
         const currentPart = parts[parts.length - 1];
 
         if (key === '✔') {
-            setShowKeyboard(false);
+            setPaymentKeyboardVisible(false);
             return;
         }
 
@@ -58,10 +57,8 @@ export const useKeyboardLogic = () => {
 
         if (!expression && (key === '.' || key === '+')) return;
 
-        if ((key === ',' || key === '-' )) return;
-
         if (key === '.') {
-            if (lastChar === '+') return;
+            if (lastChar === '+' || lastChar === ' ') return;
             if (currentPart.includes('.')) return;
             if (!/\d/.test(lastChar)) return;
         }
@@ -77,17 +74,17 @@ export const useKeyboardLogic = () => {
 
     useEffect(() => {
         Animated.timing(slideAnim, {
-            toValue: showKeyboard ? 0 : KEYBOARD_HEIGHT,
+            toValue: isPaymentKeyboardVisible ? 0 : KEYBOARD_HEIGHT,
             duration: 220,
             useNativeDriver: true,
         }).start();
-    }, [showKeyboard]);
+    }, [isPaymentKeyboardVisible]);
 
     return {
         expression,
         amount,
-        showKeyboard,
-        setShowKeyboard,
+        isPaymentKeyboardVisible,
+        setPaymentKeyboardVisible,
         slideAnim,
         handleKeyPress,
         showExpression

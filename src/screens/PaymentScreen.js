@@ -1,61 +1,71 @@
-import React, { useRef, useEffect } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, Pressable, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useKeyboardLogic } from "../hooks/useCustomKeyboardLogic";
-import AmountInput from "../components/AmountInput";
+import AmountRemarks from "../components/AmountRemarks";
 import CustomKeyboard from "../components/CustomKeyboard";
+import { numberToWordsINR } from "../helper/utils";
 
 export default function PaymentScreen() {
     const inputRef = useRef(null);
+    const [remarks, setRemarks] = useState('');
+
     const {
         expression,
         amount,
-        showKeyboard,
-        setShowKeyboard,
+        isPaymentKeyboardVisible,
+        setPaymentKeyboardVisible,
         slideAnim,
         handleKeyPress,
         showExpression
     } = useKeyboardLogic();
 
-    // Auto-focus the hidden input when an expression (like 100 +) starts
+    // Auto-focus the expression input if needed
     useEffect(() => {
-        if (showExpression && showKeyboard) {
-            const timer = setTimeout(() => {
-                inputRef.current?.focus();
-            }, 50);
+        if (showExpression && isPaymentKeyboardVisible) {
+            const timer = setTimeout(() => inputRef.current?.focus(), 50);
             return () => clearTimeout(timer);
         }
-    }, [showExpression, showKeyboard]);
+    }, [showExpression, isPaymentKeyboardVisible]);
 
     return (
-        <View style={styles.fullScreen}>
-            {/* Backdrop to close keyboard when tapping outside */}
-            {showKeyboard && (
-                <Pressable
-                    style={StyleSheet.absoluteFill}
-                    onPress={() => setShowKeyboard(false)}
-                />
-            )}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.fullScreen}
+        >
+            <ScrollView contentContainerStyle={styles.content}>
+                {/* Backdrop to close keyboard when tapping outside */}
+                {isPaymentKeyboardVisible && (
+                    <Pressable
+                        style={StyleSheet.absoluteFill}
+                        onPress={() => setPaymentKeyboardVisible(false)}
+                    />
+                )}
 
-            <View style={styles.content}>
-                <AmountInput
+                <AmountRemarks
                     amount={amount}
                     expression={expression}
                     showExpression={showExpression}
-                    showKeyboard={showKeyboard}
-                    onFocus={() => setShowKeyboard(true)}
                     inputRef={inputRef}
+
+                    isPaymentKeyboardVisible={isPaymentKeyboardVisible}
+                    setPaymentKeyboardVisible={setPaymentKeyboardVisible}
+                    onFocus={() => setPaymentKeyboardVisible(true)}
+
+                    remarks={remarks}
+                    setRemarks={setRemarks}
+                    amountWords={numberToWordsINR(amount)}
                 />
-            </View>
+            </ScrollView>
 
             <CustomKeyboard
                 slideAnim={slideAnim}
                 onKeyPress={handleKeyPress}
             />
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
     fullScreen: { flex: 1, backgroundColor: '#ADD8E6' },
-    content: { flex: 1, paddingTop: 60, paddingHorizontal: 16 }
+    content: { flex: 1, paddingTop: 60 }
 });

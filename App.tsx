@@ -11,6 +11,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import PaymentScreen from "./src/screens/PaymentScreen";
+import GenericPaymentScreen from "./src/screens/GenericPaymentScreen";
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -28,7 +29,7 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <PaymentScreen/>
+      <GenericPaymentScreen/>
     </View>
   );
 }

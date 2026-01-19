@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { formatINR } from "../helper/utils";
-import {AnimatedDigit} from "./AnimatedDigit";
+import { AnimatedDigit } from "./AnimatedDigit";
 
-const AmountInput = ({ amount, expression, showExpression, onFocus, showKeyboard, inputRef }) => {
+const AmountInput = ({
+                         amount,
+                         expression,
+                         showExpression,
+                         onFocus,
+                         showKeyboard,
+                         inputRef,
+                         containerStyle
+                     }) => {
 
     const renderFormattedAmount = (rawAmount) => {
         const formatted = formatINR(rawAmount);
@@ -32,7 +40,7 @@ const AmountInput = ({ amount, expression, showExpression, onFocus, showKeyboard
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
             <TouchableWithoutFeedback onPress={onFocus}>
                 <View style={styles.amountBox}>
                     {renderFormattedAmount(amount)}
@@ -49,6 +57,7 @@ const AmountInput = ({ amount, expression, showExpression, onFocus, showKeyboard
                         caretHidden={!showKeyboard}
                         cursorColor="#007AFF"
                         editable={true}
+                        // Keeps cursor at the end for expressions
                         selection={{ start: expression.length, end: expression.length }}
                     />
                 )}
@@ -58,17 +67,18 @@ const AmountInput = ({ amount, expression, showExpression, onFocus, showKeyboard
 };
 
 const styles = StyleSheet.create({
-    container: { width: '100%', padding: 16, backgroundColor: '#f9f9f9', borderRadius: 16 },
+    container: { width: '100%', padding: 16 },
     amountRow: { flexDirection: 'row', alignItems: 'baseline' },
     amountBox: {
-        height: 64, borderWidth: 1, borderColor: '#ddd',
-        borderRadius: 12, justifyContent: 'center', paddingHorizontal: 16,
-        backgroundColor: '#fff'
+        height: 80,
+        justifyContent: 'center',
+        paddingHorizontal: 12,
+        backgroundColor: 'transparent'
     },
-    amountText: { fontSize: 30, fontWeight: '700' },
-    expressionInput: { fontSize: 24, color: 'gray', height: 50 },
-    inputWrapper: { marginTop: 10, minHeight: 50 },
-    decimalText: { fontSize: 20, fontWeight: '600', color: '#444' },
+    amountText: { fontSize: 42, fontWeight: '700', color: '#000' },
+    decimalText: { fontSize: 28, fontWeight: '600', color: '#444' },
+    expressionInput: { fontSize: 20, color: '#666', height: 40, paddingLeft: 12 },
+    inputWrapper: { marginTop: 4, minHeight: 40 },
 });
 
 export default AmountInput;

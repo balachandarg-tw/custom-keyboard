@@ -1,19 +1,52 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, Dimensions } from 'react-native';
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    Animated,
+    Dimensions,
+} from 'react-native';
+
+import {
+    PlusIcon,
+    MinusIcon,
+    BackspaceIcon,
+    TickIcon,
+} from '../icons/KeyboardIcons';
 
 const { width } = Dimensions.get('window');
 
 const KEYS = [
-    '1', '2', '3', '-',
-    '4', '5', '6', '+',
-    '7', '8', '9', '⌫',
-    '.', '0', '00', '✔'
+    '1', '2', '3', 'plus',
+    '4', '5', '6', 'minus',
+    '7', '8', '9', 'backspace',
+    'comma', '0', 'dot', 'tick',
 ];
 
 const CustomKeyboard = ({ slideAnim, onKeyPress, height = 320 }) => {
+    const renderKey = (key) => {
+        if (/^\d$/.test(key)) {
+            return <Text style={styles.keyText}>{key}</Text>;
+        }
 
-    const isActionKey = (key) => ['-', '+', '⌫', '✔'].includes(key);
-    const isDoneKey = (key) => key === '✔';
+        switch (key) {
+            case 'plus':
+                return <PlusIcon />;
+            case 'minus':
+                return <MinusIcon />;
+            case 'backspace':
+                return <BackspaceIcon />;
+            case 'tick':
+                return <TickIcon />;
+            case 'dot':
+                return <Text style={styles.keyText}>.</Text>;
+            case 'comma':
+                return <Text style={styles.keyText}>,</Text>;
+            default:
+                return null;
+        }
+    };
 
     return (
         <Animated.View
@@ -22,24 +55,20 @@ const CustomKeyboard = ({ slideAnim, onKeyPress, height = 320 }) => {
                 { height, transform: [{ translateY: slideAnim }] },
             ]}
         >
-            <View style={styles.keyGrid}>
+            <View style={styles.grid}>
                 {KEYS.map((key) => (
                     <TouchableOpacity
                         key={key}
-                        activeOpacity={0.6}
+                        onPress={() => onKeyPress(key)}
+                        activeOpacity={0.7}
                         style={[
                             styles.key,
-                            isActionKey(key) && styles.actionKey,
-                            isDoneKey(key) && styles.doneKey
+                            key === 'tick' && styles.tickKey,
+                            (key === 'plus' || key === 'minus' || key === 'backspace') &&
+                            styles.actionKey,
                         ]}
-                        onPress={() => onKeyPress(key)}
                     >
-                        <Text style={[
-                            styles.keyText,
-                            isDoneKey(key) && styles.doneText
-                        ]}>
-                            {key}
-                        </Text>
+                        {renderKey(key)}
                     </TouchableOpacity>
                 ))}
             </View>
@@ -57,23 +86,18 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 24,
         borderTopRightRadius: 24,
         padding: 12,
-        // Shadow
         elevation: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: -10 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
     },
-    keyGrid: {
+    grid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
     },
     key: {
-        width: (width - 48) / 4, // 4 columns layout
+        width: (width - 48) / 4,
         height: 60,
         backgroundColor: '#FFFFFF',
-        borderRadius: 12,
+        borderRadius: 14,
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
@@ -81,17 +105,14 @@ const styles = StyleSheet.create({
     actionKey: {
         backgroundColor: '#E5E5EA',
     },
-    doneKey: {
+    tickKey: {
         backgroundColor: '#007AFF',
     },
     keyText: {
         fontSize: 24,
-        fontWeight: '500',
+        fontWeight: '600',
         color: '#000',
     },
-    doneText: {
-        color: '#FFF',
-    }
 });
 
 export default CustomKeyboard;

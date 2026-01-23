@@ -15,12 +15,16 @@ export const useKeyboardLogic = () => {
 
     const calculateAmount = (exp) => {
         if (!exp) return '0';
-        let normalized = exp.replace(/\s/g, '').replace(/[.+]$/, '');
+
+        const normalized = exp
+            .replace(/\s/g, '')
+            .replace(/,/g, '')
+            .replace(/[.+]$/, '');
 
         const total = normalized
             .split('+')
             .filter(Boolean)
-            .reduce((sum, val) => sum + parseFloat(val), 0);
+            .reduce((sum, val) => sum + Number(val), 0);
 
         return total.toString();
     };
@@ -32,44 +36,59 @@ export const useKeyboardLogic = () => {
         const parts = expression.split('+');
         const currentPart = parts[parts.length - 1];
 
-        if (key === '✔') {
+        if (key === 'tick') {
             setPaymentKeyboardVisible(false);
             return;
         }
 
-        if (key === '⌫') {
-            const isOperatorWithSpaces = expression.endsWith(' + ');
-            const updated = isOperatorWithSpaces
+        if (key === 'backspace') {
+            const updated = expression.endsWith(' + ')
                 ? expression.slice(0, -3)
                 : expression.slice(0, -1);
+
             setExpression(updated);
             setAmount(calculateAmount(updated));
             return;
         }
 
-        if (key === '+') {
+        if (key === 'plus') {
+            if (!expression) return;
             if (lastChar === '+' || lastChar === '.' || lastChar === ' ') return;
+
             const updated = expression + ' + ';
             setExpression(updated);
             setAmount(calculateAmount(updated));
             return;
         }
 
-        if (!expression && (key === '.' || key === '+')) return;
+        if (key === 'minus') {
+            if (!expression) return;
+            if (lastChar === '+' || lastChar === '.' || lastChar === ' ') return;
 
-        if (key === '.') {
+            const updated = expression + ' - ';
+            setExpression(updated);
+            setAmount(calculateAmount(updated));
+            return;
+        }
+
+        if (key === 'dot') {
+            if (!expression) return;
             if (lastChar === '+' || lastChar === ' ') return;
             if (currentPart.includes('.')) return;
-            if (!/\d/.test(lastChar)) return;
+
+            const updated = expression + '.';
+            setExpression(updated);
+            setAmount(calculateAmount(updated));
+            return;
         }
 
-        if (/\d/.test(key) && currentPart.includes('.')) {
-            if (getDecimalCount(currentPart) >= 2) return;
-        }
+        if (/^\d$/.test(key)) {
+            if (currentPart.includes('.') && getDecimalCount(currentPart) >= 2) return;
 
-        const updated = expression + key;
-        setExpression(updated);
-        setAmount(calculateAmount(updated));
+            const updated = expression + key;
+            setExpression(updated);
+            setAmount(calculateAmount(updated));
+        }
     };
 
     useEffect(() => {
@@ -83,10 +102,10 @@ export const useKeyboardLogic = () => {
     return {
         expression,
         amount,
+        showExpression,
+        slideAnim,
         isPaymentKeyboardVisible,
         setPaymentKeyboardVisible,
-        slideAnim,
         handleKeyPress,
-        showExpression
     };
 };
